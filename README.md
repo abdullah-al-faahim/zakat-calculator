@@ -7,7 +7,7 @@
 
 ## 🌙 Live Demo
 
-[![Open Calculator](https://img.shields.io/badge/Open-Calculator-0d4a2f?style=for-the-badge&logo=html5&logoColor=white)](https://abdullahalfahim.bd)
+[![Open Calculator](https://img.shields.io/badge/Open-Calculator-0d4a2f?style=for-the-badge&logo=html5&logoColor=white)](https://abdullahalfahim.bd/zakat-calculator.html)
 
 ---
 
