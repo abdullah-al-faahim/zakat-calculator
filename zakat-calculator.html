@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="bn" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>যাকাত ক্যালকুলেটর | Zakat Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Noto+Serif+Bengali:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --emerald:    #0d4a2f;
+    --emerald-mid:#145c3a;
+    --emerald-lt: #1a7a4e;
+    --gold:       #c9a84c;
+    --gold-lt:    #e4c97e;
+    --gold-pale:  #f5e9c8;
+    --cream:      #fdf8ee;
+    --ink:        #1a1209;
+    --muted:      #6b5e44;
+    --white:      #ffffff;
+    --radius:     14px;
+    --shadow:     0 8px 40px rgba(13,74,47,0.13);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Serif Bengali', serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── Geometric Background ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: -1;
+    background:
+      radial-gradient(ellipse 80% 60% at 10% 10%, rgba(13,74,47,.08) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 90% 90%, rgba(201,168,76,.10) 0%, transparent 60%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cpath d='M40 0 L80 40 L40 80 L0 40Z' fill='none' stroke='%230d4a2f' stroke-width='.4' opacity='.08'/%3E%3Ccircle cx='40' cy='40' r='15' fill='none' stroke='%23c9a84c' stroke-width='.4' opacity='.10'/%3E%3C/svg%3E");
+  }
+
+  /* ── Header ── */
+  .site-header {
+    background: linear-gradient(135deg, var(--emerald) 0%, var(--emerald-mid) 60%, #0a3d25 100%);
+    color: var(--white);
+    text-align: center;
+    padding: 48px 20px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .site-header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cpolygon points='60,5 115,35 115,85 60,115 5,85 5,35' fill='none' stroke='%23c9a84c' stroke-width='.6' opacity='.18'/%3E%3Cpolygon points='60,20 100,42 100,78 60,100 20,78 20,42' fill='none' stroke='%23c9a84c' stroke-width='.4' opacity='.12'/%3E%3C/svg%3E") repeat;
+    opacity: 0.4;
+  }
+  .header-inner { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
+
+  .arabic-title {
+    font-family: 'Amiri', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    color: var(--gold-lt);
+    letter-spacing: .04em;
+    line-height: 1.2;
+    margin-bottom: 6px;
+    text-shadow: 0 2px 12px rgba(0,0,0,.35);
+  }
+  .bangla-title {
+    font-family: 'Noto Serif Bengali', serif;
+    font-size: clamp(1.4rem, 3.5vw, 2rem);
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 10px;
+  }
+  .subtitle {
+    font-size: .95rem;
+    color: rgba(255,255,255,.75);
+    font-weight: 400;
+    line-height: 1.6;
+  }
+  .gold-line {
+    width: 80px; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 14px auto;
+  }
+
+  /* ── Quran Banner ── */
+  .quran-banner {
+    background: linear-gradient(90deg, var(--gold-pale), #fdf0cc, var(--gold-pale));
+    border-top: 3px solid var(--gold);
+    border-bottom: 3px solid var(--gold);
+    padding: 18px 24px;
+    text-align: center;
+  }
+  .quran-ayah {
+    font-family: 'Amiri', serif;
+    font-size: 1.35rem;
+    color: var(--emerald);
+    line-height: 2;
+    margin-bottom: 4px;
+  }
+  .quran-ref {
+    font-size: .82rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* ── Main Layout ── */
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 16px 60px;
+  }
+
+  /* ── Section Cards ── */
+  .section-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 24px;
+    overflow: hidden;
+    border: 1px solid rgba(201,168,76,.18);
+    animation: fadeUp .5s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .section-card:nth-child(1) { animation-delay: .05s; }
+  .section-card:nth-child(2) { animation-delay: .10s; }
+  .section-card:nth-child(3) { animation-delay: .15s; }
+  .section-card:nth-child(4) { animation-delay: .20s; }
+  .section-card:nth-child(5) { animation-delay: .25s; }
+  .section-card:nth-child(6) { animation-delay: .30s; }
+  .section-card:nth-child(7) { animation-delay: .35s; }
+
+  .card-header {
+    background: linear-gradient(90deg, var(--emerald) 0%, var(--emerald-mid) 100%);
+    padding: 14px 22px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .card-icon {
+    width: 36px; height: 36px;
+    background: rgba(255,255,255,.12);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+  .card-title {
+    font-family: 'Noto Serif Bengali', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--white);
+  }
+  .card-hadith {
+    font-size: .78rem;
+    color: rgba(255,255,255,.65);
+    font-style: italic;
+    margin-top: 2px;
+  }
+  .card-body { padding: 22px; }
+
+  /* ── Form Fields ── */
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .field-row.single { grid-template-columns: 1fr; }
+  @media (max-width: 540px) {
+    .field-row { grid-template-columns: 1fr; }
+  }
+
+  .field label {
+    display: block;
+    font-size: .87rem;
+    font-weight: 600;
+    color: var(--emerald);
+    margin-bottom: 6px;
+  }
+  .field input, .field select {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid #d4c9a8;
+    border-radius: 8px;
+    font-family: 'Noto Serif Bengali', serif;
+    font-size: .95rem;
+    transition: border-color .2s, box-shadow .2s;
+    outline: none;
+  }
+  .field input:focus, .field select:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(201,168,76,.18);
+  }
+  .field .hint {
+    font-size: .76rem;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* ── Nisab Info Box ── */
+  .nisab-box {
+    background: linear-gradient(135deg, #f0f9f4, #e8f5ed);
+    border: 1.5px solid var(--emerald-lt);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 18px;
+    display: flex; align-items: flex-start; gap: 14px;
+  }
+  .nisab-icon { font-size: 1.6rem; line-height: 1; }
+  .nisab-text { font-size: .88rem; line-height: 1.65; color: var(--emerald); }
+  .nisab-text strong { font-weight: 700; font-size: .95rem; }
+  #nisab-value-display {
+    font-family: 'Noto Serif Bengali', serif;
+    font-weight: 700;
+    color: var(--emerald);
+    font-size: 1.05rem;
+  }
+
+  /* ── Livestock Table ── */
+  .livestock-note {
+    background: #fffbef;
+    border-left: 4px solid var(--gold);
+    padding: 12px 16px;
+    font-size: .83rem;
+    color: var(--muted);
+    border-radius: 0 8px 8px 0;
+    margin-top: 12px;
+    line-height: 1.7;
+  }
+
+  /* ── Calculate Button ── */
+  .calc-btn {
+    width: 100%;
+    padding: 18px;
+    background: linear-gradient(135deg, var(--emerald) 0%, var(--emerald-lt) 100%);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius);
+    font-family: 'Noto Serif Bengali', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    box-shadow: 0 6px 24px rgba(13,74,47,.35);
+    transition: transform .18s, box-shadow .18s;
+    position: relative; overflow: hidden;
+    letter-spacing: .02em;
+  }
+  .calc-btn::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,.08));
+  }
+  .calc-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(13,74,47,.40); }
+  .calc-btn:active { transform: translateY(0); }
+
+  /* ── Result Panel ── */
+  #result-panel {
+    display: none;
+    background: linear-gradient(135deg, var(--emerald) 0%, #0a3d25 100%);
+    border-radius: var(--radius);
+    padding: 32px 28px;
+    color: var(--white);
+    box-shadow: 0 12px 48px rgba(13,74,47,.40);
+    animation: fadeUp .5s ease;
+    margin-top: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  #result-panel::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Ccircle cx='100' cy='100' r='80' fill='none' stroke='%23c9a84c' stroke-width='.7' opacity='.12'/%3E%3Ccircle cx='100' cy='100' r='55' fill='none' stroke='%23c9a84c' stroke-width='.4' opacity='.08'/%3E%3C/svg%3E") center/300px no-repeat;
+    opacity: .5;
+  }
+  .result-inner { position: relative; z-index: 1; }
+
+  .result-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .result-label {
+    font-size: .9rem;
+    color: rgba(255,255,255,.7);
+    margin-bottom: 6px;
+  }
+  .result-amount {
+    font-family: 'Noto Serif Bengali', serif;
+    font-size: clamp(2.2rem, 6vw, 3.5rem);
+    font-weight: 700;
+    color: var(--gold-lt);
+    line-height: 1.1;
+    text-shadow: 0 2px 12px rgba(0,0,0,.4);
+  }
+  .result-amount span { font-size: 55%; color: var(--gold); }
+  .result-eligible {
+    display: inline-block;
+    background: rgba(201,168,76,.18);
+    border: 1px solid rgba(201,168,76,.4);
+    border-radius: 20px;
+    padding: 4px 16px;
+    font-size: .85rem;
+    color: var(--gold-lt);
+    margin-top: 10px;
+  }
+  .not-eligible { color: rgba(255,255,255,.6) !important; }
+  .result-gold-line {
+    width: 60px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 16px auto;
+  }
+
+  /* Breakdown */
+  .breakdown-title {
+    font-size: .85rem;
+    font-weight: 600;
+    color: rgba(255,255,255,.6);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    margin-bottom: 14px;
+    text-align: center;
+  }
+  .breakdown-grid { display: flex; flex-direction: column; gap: 9px; }
+  .breakdown-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255,255,255,.07);
+    border-radius: 8px;
+    padding: 10px 16px;
+    gap: 8px;
+  }
+  .breakdown-row.total-row {
+    background: rgba(201,168,76,.18);
+    border: 1px solid rgba(201,168,76,.3);
+    margin-top: 6px;
+  }
+  .br-name { font-size: .88rem; color: rgba(255,255,255,.85); }
+  .br-amount {
+    font-family: 'Noto Serif Bengali', serif;
+    font-weight: 700;
+    color: var(--gold-lt);
+    font-size: .95rem;
+    white-space: nowrap;
+  }
+  .br-rate {
+    font-size: .75rem;
+    color: rgba(255,255,255,.45);
+    margin-left: 4px;
+  }
+
+  /* ── Disclaimer ── */
+  .disclaimer {
+    background: #fffbef;
+    border: 1px dashed var(--gold);
+    border-radius: 10px;
+    padding: 16px 18px;
+    font-size: .8rem;
+    color: var(--muted);
+    line-height: 1.75;
+    margin-top: 24px;
+    text-align: center;
+  }
+  .disclaimer strong { color: var(--emerald); }
+
+  /* ── References ── */
+  .references {
+    margin-top: 32px;
+    padding: 0 4px;
+  }
+  .ref-title {
+    font-family: 'Noto Serif Bengali', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--emerald);
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .ref-list { display: flex; flex-direction: column; gap: 8px; }
+  .ref-item {
+    background: var(--white);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+    padding: 10px 14px;
+    font-size: .8rem;
+    color: var(--muted);
+    line-height: 1.6;
+    box-shadow: 0 2px 8px rgba(0,0,0,.05);
+  }
+  .ref-item strong { color: var(--emerald); font-weight: 600; }
+
+  /* ── Price Fetch Banner ── */
+  .price-fetch-bar {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    background: linear-gradient(90deg, #f0f9f4, #e8f5ed);
+    border: 1.5px solid var(--emerald-lt);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 6px;
+    font-size: .85rem;
+  }
+  .fetch-status {
+    display: flex; align-items: center; gap: 8px;
+    color: var(--emerald); font-weight: 600; flex: 1;
+  }
+  .fetch-btn {
+    padding: 7px 16px;
+    background: var(--emerald);
+    color: var(--white);
+    border: none; border-radius: 7px;
+    font-family: 'Noto Serif Bengali', serif;
+    font-size: .82rem; font-weight: 600;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 6px;
+    transition: background .2s, transform .15s;
+    white-space: nowrap;
+  }
+  .fetch-btn:hover { background: var(--emerald-lt); transform: translateY(-1px); }
+  .fetch-btn:disabled { background: #a0bcac; cursor: not-allowed; transform: none; }
+  .price-source-tag {
+    font-size: .72rem;
+    color: var(--muted);
+    background: rgba(201,168,76,.15);
+    border-radius: 4px;
+    padding: 2px 7px;
+  }
+  /* Spinner */
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spinner {
+    width: 15px; height: 15px;
+    border: 2px solid rgba(255,255,255,.35);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+    flex-shrink: 0;
+  }
+  /* Input edited highlight */
+  .field input.edited {
+    border-color: var(--gold);
+    background: #fffbef;
+  }
+  .field input.auto-filled {
+    border-color: var(--emerald-lt);
+    background: #f0faf5;
+  }
+  .input-badge {
+    display: inline-block;
+    font-size: .68rem; font-weight: 700;
+    padding: 1px 6px; border-radius: 4px;
+    margin-top: 3px;
+  }
+  .badge-live  { background: #d4f0e2; color: #0d6b3a; }
+  .badge-manual{ background: #fef3cd; color: #856404; }
+
+  /* ── Reset ── */
+  .reset-btn {
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    color: var(--muted);
+    border: 1.5px solid #d4c9a8;
+    border-radius: 10px;
+    font-family: 'Noto Serif Bengali', serif;
+    font-size: .9rem;
+    transition: all .2s;
+  }
+  .reset-btn:hover { background: #f5ede0; color: var(--emerald); border-color: var(--gold); }
+
+  /* ── Eligible Badge ── */
+  .eligible-yes { color: #2ec27e; }
+  .eligible-no  { color: #e84f4f; }
+
+  /* ── Toggle checkbox ── */
+  .toggle-row {
+    display: flex; align-items: center; gap: 10px;
+    cursor: pointer;
+    font-size: .9rem;
+    color: var(--emerald);
+    font-weight: 600;
+    user-select: none;
+  }
+  .toggle-row input[type=checkbox] {
+    width: 18px; height: 18px;
+    accent-color: var(--emerald);
+    cursor: pointer;
+  }
+  .collapsible-content { margin-top: 14px; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--cream); }
+  ::-webkit-scrollbar-thumb { background: var(--emerald-lt); border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="arabic-title">حاسبة الزكاة</div>
+    <div class="gold-line"></div>
+    <div class="bangla-title">যাকাত ক্যালকুলেটর</div>
+    <div class="subtitle">কুরআন ও সুন্নাহর আলোকে — ইসলামী শরীয়া সম্মত যাকাত নির্ণয়<br>ইসলামের তৃতীয় রুকন | সিলভার নিসাব স্ট্যান্ডার্ড</div>
+  </div>
+</header>
+
+<!-- QURAN BANNER -->
+<div class="quran-banner">
+  <div class="quran-ayah">﴿ خُذْ مِنْ أَمْوَالِهِمْ صَدَقَةً تُطَهِّرُهُمْ وَتُزَكِّيهِم بِهَا ﴾</div>
+  <div class="quran-ref">«তাদের সম্পদ থেকে যাকাত গ্রহণ করুন, যা তাদের পবিত্র ও পরিশুদ্ধ করবে।» — সূরা তাওবাহ ৯:১০৩</div>
+</div>
+
+<div class="container">
+
+  <!-- ── NISAB SETTINGS ── -->
+  <div class="section-card">
+    <div class="card-header">
+      <div class="card-icon">⚖️</div>
+      <div>
+        <div class="card-title">নিসাব নির্ধারণ (রূপার মূল্য অনুযায়ী)</div>
+        <div class="card-hadith">«রূপার ক্ষেত্রে নিসাব হলো ২০০ দিরহাম।» — আবু দাউদ ১৫৭৪</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <!-- Live Price Fetch Bar -->
+      <div class="price-fetch-bar">
+        <div class="fetch-status" id="fetch-status">
+          <span id="fetch-icon">🌐</span>
+          <span id="fetch-text">বর্তমান বাংলাদেশের সোনা ও রূপার বাজারদর স্বয়ংক্রিয়ভাবে লোড করুন</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          <span id="price-source-tag" class="price-source-tag" style="display:none;"></span>
+          <button class="fetch-btn" id="fetch-btn" onclick="loadTodayPrices()">
+            <span id="fetch-btn-icon">🔍</span>
+            <span id="fetch-btn-text">লাইভ দাম আনুন</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="nisab-box">
+        <div class="nisab-icon">🌙</div>
+        <div class="nisab-text">
+          <strong>রূপার নিসাব: ৬১২.৩৬ গ্রাম রূপার বর্তমান বাজারমূল্য</strong><br>
+          আপনার মোট যাকাতযোগ্য সম্পদ যদি নিসাব পরিমাণ বা তার বেশি হয় এবং এক চান্দ্র বছর (হাওল) পূর্ণ হয়, তাহলে যাকাত ফরজ।<br>
+          বর্তমান নিসাব মূল্য: <span id="nisab-value-display">হিসাব করুন</span>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>প্রতি গ্রাম রূপার মূল্য (টাকায়)</label>
+          <input type="number" id="silver-price" placeholder="লাইভ দাম লোড করুন..." min="0" step="0.01" oninput="markEdited('silver-price','silver-badge')">
+          <div class="hint">বর্তমান বাজারমূল্য (BDT/গ্রাম)</div>
+          <span id="silver-badge" class="input-badge" style="display:none;"></span>
+        </div>
+        <div class="field">
+          <label>প্রতি গ্রাম সোনার মূল্য (টাকায়)</label>
+          <input type="number" id="gold-price" placeholder="লাইভ দাম লোড করুন..." min="0" step="0.01" oninput="markEdited('gold-price','gold-badge')">
+          <div class="hint">বর্তমান বাজারমূল্য (BDT/গ্রাম)</div>
+          <span id="gold-badge" class="input-badge" style="display:none;"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CASH & SAVINGS ── -->
+  <div class="section-card">
+    <div class="card-header">
+      <div class="card-icon">💰</div>
+      <div>
+        <div class="card-title">নগদ অর্থ ও ব্যাংক সঞ্চয়</div>
+        <div class="card-hadith">«যে অর্থ এক বছর তোমার কাছে থাকে, তার ৪০ ভাগের ১ ভাগ যাকাত।» — তিরমিযী ৬২০</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="field-row">
+        <div class="field">
+          <label>হাতে নগদ টাকা (BDT)</label>
+          <input type="number" id="cash" placeholder="০" min="0" step="1">
+        </div>
+        <div class="field">
+          <label>ব্যাংক/মোবাইল ব্যাংকিং সঞ্চয় (BDT)</label>
+          <input type="number" id="bank" placeholder="০" min="0" step="1">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>FDR / DPS / সঞ্চয়পত্র (BDT)</label>
+          <input type="number" id="fdr" placeholder="০" min="0" step="1">
+        </div>
+        <div class="field">
+          <label>দেনাদারদের কাছ থেকে পাওনা (BDT)</label>
+          <input type="number" id="receivable" placeholder="০" min="0" step="1">
+        </div>
+      </div>
+      <div class="field-row single">
+        <div class="field">
+          <label>প্রদেয় ঋণ বাদ দিন (BDT)</label>
+          <input type="number" id="liabilities" placeholder="০" min="0" step="1">
+          <div class="hint">যে ঋণ পরিশোধ করতে হবে তা বিয়োগ করা হবে</div>
+        </div>
+      </div>
+      <div class="hint" style="background:#f0f9f4;padding:10px 12px;border-radius:8px;color:var(--emerald);margin-top:4px;">
+        📌 যাকাতের হার: <strong>২.৫%</strong> | হাওল (এক চান্দ্র বছর) পূর্ণ হতে হবে
+      </div>
+    </div>
+  </div>
+
+  <!-- ── GOLD & SILVER ── -->
+  <div class="section-card">
+    <div class="card-header">
+      <div class="card-icon">🥇</div>
+      <div>
+        <div class="card-title">সোনা ও রূপা</div>
+        <div class="card-hadith">«তোমার সোনা যদি ২০ দিনার হয় তাহলে ৪০ ভাগের ১ ভাগ।» — আবু দাউদ ১৫৭৪</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="field-row">
+        <div class="field">
+          <label>সোনার পরিমাণ (গ্রাম)</label>
+          <input type="number" id="gold-grams" placeholder="০" min="0" step="0.01">
+          <div class="hint">নিসাব: ৮৭.৪৮ গ্রাম | যাকাত: ২.৫%</div>
+        </div>
+        <div class="field">
+          <label>রূপার পরিমাণ (গ্রাম)</label>
+          <input type="number" id="silver-grams" placeholder="০" min="0" step="0.01">
+          <div class="hint">নিসাব: ৬১২.৩৬ গ্রাম | যাকাত: ২.৫%</div>
+        </div>
+      </div>
+      <div class="livestock-note">
+        📖 <strong>সূরা তাওবাহ ৯:৩৪:</strong> «যারা সোনা ও রূপা সঞ্চয় করে রাখে এবং আল্লাহর পথে ব্যয় করে না, তাদের কঠিন আযাবের সুসংবাদ দিন।» সোনা-রূপার গহনাতেও হানাফি মতে যাকাত ফরজ।
+      </div>
+    </div>
+  </div>
+
+  <!-- ── BUSINESS INVENTORY ── -->
+  <div class="section-card">
+    <div class="card-header">
+      <div class="card-icon">🏪</div>
+      <div>
+        <div class="card-title">ব্যবসায়িক মালামাল ও স্টক</div>
+        <div class="card-hadith">«ব্যবসায়িক পণ্যে যাকাত ফরজ।» — আবু দাউদ ১৫৬২</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="field-row">
+        <div class="field">
+          <label>ব্যবসায়িক মালামালের বর্তমান পাইকারি মূল্য (BDT)</label>
+          <input type="number" id="business-stock" placeholder="০" min="0" step="1">
+          <div class="hint">বর্তমান পাইকারি (Wholesale) মূল্যে হিসাব করুন</div>
+        </div>
+        <div class="field">
+          <label>ব্যবসায়িক নগদ ও ব্যাংক ব্যালেন্স (BDT)</label>
+          <input type="number" id="business-cash" placeholder="০" min="0" step="1">
+        </div>
+      </div>
+      <div class="field-row single">
+        <div class="field">
+          <label>ব্যবসার প্রদেয় ঋণ বাদ দিন (BDT)</label>
+          <input type="number" id="business-liabilities" placeholder="০" min="0" step="1">
+        </div>
+      </div>
+      <div class="hint" style="background:#f0f9f4;padding:10px 12px;border-radius:8px;color:var(--emerald);margin-top:4px;">
+        📌 যাকাতের হার: <strong>২.৫%</strong> | মেশিনারি ও স্থায়ী সম্পদ যাকাতযোগ্য নয়
+      </div>
+    </div>
+  </div>
+
+  <!-- ── INVESTMENTS ── -->
+  <div class="section-card">
+    <div class="card-header">
+      <div class="card-icon">📈</div>
+      <div>
+        <div class="card-title">বিনিয়োগ ও শেয়ার</div>
+        <div class="card-hadith">বিনিয়োগের উপর ২.৫% হারে যাকাত — সমসাময়িক ফকিহদের মতামত</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="field-row">
+        <div class="field">
+          <label>শেয়ার বাজারে বিনিয়োগ (BDT)</label>
+          <input type="number" id="shares" placeholder="০" min="0" step="1">
+          <div class="hint">শেয়ারের বর্তমান বাজারমূল্য</div>
+        </div>
+        <div class="field">
+          <label>মিউচুয়াল ফান্ড / ইউনিট ফান্ড (BDT)</label>
+          <input type="number" id="mutual-fund" placeholder="০" min="0" step="1">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>অন্যান্য বিনিয়োগ (BDT)</label>
+          <input type="number" id="other-investment" placeholder="০" min="0" step="1">
+        </div>
+        <div class="field">
+          <label>ভাড়া বাড়ির আয় (বার্ষিক, BDT)</label>
+          <input type="number" id="rental-income" placeholder="০" min="0" step="1">
+          <div class="hint">বাড়ির মূল্য নয়, বার্ষিক আয়ের উপর</div>
+        </div>
+      </div>
+      <div class="hint" style="background:#f0f9f4;padding:10px 12px;border-radius:8px;color:var(--emerald);margin-top:4px;">
+        📌 যাকাতের হার: <strong>২.৫%</strong> | শুধুমাত্র হালাল বিনিয়োগের উপর প্রযোজ্য
+      </div>
+    </div>
+  </div>
+
+  <!-- ── AGRICULTURE ── -->
+  <div class="section-card">
+    <div class="card-header">
+      <div class="card-icon">🌾</div>
+      <div>
+        <div class="card-title">কৃষি উৎপাদন</div>
+        <div class="card-hadith">«বৃষ্টির পানিতে চাষ হলে ১০%, সেচের পানিতে হলে ৫%।» — বুখারী ১৪৮৩</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="field-row">
+        <div class="field">
+          <label>বৃষ্টির পানিতে উৎপাদিত ফসল (BDT মূল্য)</label>
+          <input type="number" id="rain-crop" placeholder="০" min="0" step="1">
+          <div class="hint">যাকাত: <strong>১০%</strong> (উশর) | নিসাব: ৬৫৩ কেজি শস্য সমতুল্য</div>
+        </div>
+        <div class="field">
+          <label>সেচের পানিতে উৎপাদিত ফসল (BDT মূল্য)</label>
+          <input type="number" id="irrigated-crop" placeholder="০" min="0" step="1">
+          <div class="hint">যাকাত: <strong>৫%</strong> (নিসফ উশর)</div>
+        </div>
+      </div>
+      <div class="livestock-note">
+        📖 <strong>হাদীস — বুখারী ১৪৮৩:</strong> «আকাশের পানিতে ও ঝর্ণায় সেচ পাওয়া ফসলে ১/১০ এবং সেচে সেচা ফসলে ১/২০।» কৃষি যাকাতে হাওল (এক বছর) শর্ত নেই — ফসল কাটার সাথে সাথেই দিতে হয়।
+      </div>
+    </div>
+  </div>
+
+  <!-- ── LIVESTOCK ── -->
+  <div class="section-card">
+    <div class="card-header">
+      <div class="card-icon">🐄</div>
+      <div>
+        <div class="card-title">গবাদি পশু</div>
+        <div class="card-hadith">«৪০টি ছাগল/ভেড়ায় ১টি ছাগল যাকাত।» — বুখারী ১৪৫৪</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="field-row">
+        <div class="field">
+          <label>ছাগল / ভেড়ার সংখ্যা</label>
+          <input type="number" id="goat" placeholder="০" min="0" step="1">
+          <div class="hint">নিসাব: ৪০টি | ৪০-১২০ = ১টি ছাগল</div>
+        </div>
+        <div class="field">
+          <label>গরু / মহিষের সংখ্যা</label>
+          <input type="number" id="cattle" placeholder="০" min="0" step="1">
+          <div class="hint">নিসাব: ৩০টি | ৩০-৩৯ = ১টি বকর (১ বছর বয়সী)</div>
+        </div>
+      </div>
+      <div class="field-row single">
+        <div class="field">
+          <label>উট/দেবী উটের সংখ্যা (যদি থাকে)</label>
+          <input type="number" id="camel" placeholder="০" min="0" step="1">
+          <div class="hint">নিসাব: ৫টি | ৫-৯ = ১টি ছাগল</div>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>প্রতিটি ছাগলের আনুমানিক মূল্য (BDT)</label>
+          <input type="number" id="goat-price" placeholder="৮০০০" min="0" step="1" value="8000">
+        </div>
+        <div class="field">
+          <label>প্রতিটি গরুর আনুমানিক মূল্য (BDT)</label>
+          <input type="number" id="cattle-price" placeholder="৫০০০০" min="0" step="1" value="50000">
+        </div>
+      </div>
+
+      <div class="livestock-note">
+        <strong>ছাগল/ভেড়ার যাকাত বিধান:</strong><br>
+        ৪০–১২০টি = ১টি ছাগল | ১২১–২০০টি = ২টি ছাগল | ২০১–৩০০টি = ৩টি ছাগল | এরপর প্রতি ১০০টিতে ১টি<br><br>
+        <strong>গরু/মহিষের যাকাত বিধান:</strong><br>
+        ৩০–৩৯টি = ১টি এক বছর বয়সী বকর | ৪০–৫৯টি = ১টি দুই বছর বয়সী বকর | ৬০+ = ২টি এক বছর বয়সী<br><br>
+        <strong>উটের যাকাত বিধান:</strong><br>
+        ৫–৯টি = ১টি ছাগল | ১০–১৪টি = ২টি ছাগল | ১৫–১৯টি = ৩টি ছাগল | ২০–২৪টি = ৪টি ছাগল | ২৫–৩৫টি = ১টি উট
+      </div>
+    </div>
+  </div>
+
+  <!-- CALCULATE BUTTON -->
+  <button class="calc-btn" onclick="calculateZakat()">
+    <span>🕌</span>
+    <span>যাকাত হিসাব করুন</span>
+    <span>﷽</span>
+  </button>
+
+  <!-- RESULT PANEL -->
+  <div id="result-panel">
+    <div class="result-inner">
+      <div class="result-header">
+        <div class="result-label">আপনার মোট যাকাতযোগ্য সম্পদ</div>
+        <div id="total-wealth-display" style="font-family:'Noto Serif Bengali',serif;font-size:1.1rem;color:rgba(255,255,255,.7);margin-bottom:10px;"></div>
+        <div class="result-gold-line"></div>
+        <div class="result-label" style="margin-top:14px;">প্রদেয় মোট যাকাত</div>
+        <div class="result-amount" id="total-zakat-display"></div>
+        <div id="eligibility-badge" class="result-eligible"></div>
+      </div>
+
+      <div class="result-gold-line"></div>
+
+      <div class="breakdown-title">বিস্তারিত হিসাব</div>
+      <div class="breakdown-grid" id="breakdown-grid"></div>
+
+      <div style="margin-top:20px; padding:14px; background:rgba(255,255,255,.07); border-radius:10px; text-align:center; font-size:.85rem; color:rgba(255,255,255,.65); line-height:1.7;">
+        🌙 <strong style="color:var(--gold-lt);">যাকাতের ৮ খাত (সূরা তাওবাহ ৯:৬০):</strong> ফকির, মিসকীন, যাকাত আদায়কারী, নতুন মুসলিম, দাসমুক্তি, ঋণগ্রস্ত, আল্লাহর পথে, মুসাফির
+      </div>
+    </div>
+  </div>
+
+  <button class="reset-btn" onclick="resetForm()">🔄 পুনরায় হিসাব করুন</button>
+
+  <!-- REFERENCES -->
+  <div class="references">
+    <div class="ref-title">📚 কুরআন ও হাদীসের রেফারেন্স</div>
+    <div class="ref-list">
+      <div class="ref-item"><strong>সূরা তাওবাহ ৯:১০৩</strong> — «তাদের সম্পদ থেকে যাকাত গ্রহণ করুন, যা তাদের পবিত্র করবে।» যাকাত ফরজ হওয়ার মূল দলিল।</div>
+      <div class="ref-item"><strong>সূরা বাকারাহ ২:৪৩</strong> — «সালাত প্রতিষ্ঠা করো এবং যাকাত দাও।» ইসলামের পাঁচ স্তম্ভের একটি।</div>
+      <div class="ref-item"><strong>সহীহ বুখারী ১৪৫৪ | আবু দাউদ ১৫৭৪</strong> — রূপার নিসাব: ২০০ দিরহাম (৬১২.৩৬ গ্রাম) | সোনার নিসাব: ২০ দিনার (৮৭.৪৮ গ্রাম) | যাকাতের হার: ২.৫% (রুবু'উল উশর)।</div>
+      <div class="ref-item"><strong>সহীহ বুখারী ১৪৮৩</strong> — কৃষি যাকাত: বৃষ্টির পানিতে চাষ = ১০% (উশর), সেচে চাষ = ৫% (নিসফ উশর)।</div>
+      <div class="ref-item"><strong>সহীহ বুখারী ১৪৫৪ (আনাস রা.)</strong> — পশু যাকাত: ছাগল ৪০-১২০টিতে ১টি, গরু ৩০টিতে ১টি বকর, উট ৫টিতে ১টি ছাগল।</div>
+      <div class="ref-item"><strong>তিরমিযী ৬২০ | নাসাঈ ২৪৪১</strong> — «সম্পদ পবিত্র না হওয়া পর্যন্ত যাকাত দেওয়া হয় না।» হাওল (এক চান্দ্র বছর) শর্ত।</div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <strong>⚠️ গুরুত্বপূর্ণ বিজ্ঞপ্তি:</strong> এই ক্যালকুলেটর সাধারণ তথ্যের জন্য। জটিল পরিস্থিতিতে অভিজ্ঞ আলেম বা ইসলামী স্কলারের পরামর্শ নিন। রূপা ও সোনার মূল্য প্রতিদিন পরিবর্তন হয় — সর্বশেষ বাজারমূল্য ব্যবহার করুন।
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════
+// HELPERS
+// ════════════════════════════════════════════════
+const num = id => parseFloat(document.getElementById(id).value) || 0;
+const fmt = v  => '৳' + Math.round(v).toLocaleString('bn-BD');
+
+// Track which fields were auto-filled vs manually edited
+const fieldState = { 'silver-price': 'empty', 'gold-price': 'empty' };
+
+function markEdited(inputId, badgeId) {
+  fieldState[inputId] = 'manual';
+  const badge = document.getElementById(badgeId);
+  badge.textContent = '✏️ ম্যানুয়াল';
+  badge.className   = 'input-badge badge-manual';
+  badge.style.display = 'inline-block';
+  document.getElementById(inputId).className = 'edited';
+  updateNisab();
+}
+
+function setAutoFilled(inputId, badgeId, value) {
+  const el = document.getElementById(inputId);
+  el.value     = value;
+  el.className = 'auto-filled';
+  fieldState[inputId] = 'live';
+  const badge = document.getElementById(badgeId);
+  badge.textContent   = '🟢 লাইভ';
+  badge.className     = 'input-badge badge-live';
+  badge.style.display = 'inline-block';
+}
+
+// ════════════════════════════════════════════════
+// TODAY'S PRICES — Fetched via Google Search by Claude
+// Source: goldpricez.com | Date: ৪ মার্চ ২০২৬
+// ════════════════════════════════════════════════
+const LIVE_PRICES = {
+  gold_per_gram:   20922.61,   // 24K সোনা, BDT/গ্রাম
+  silver_per_gram:   366.64,   // ৯৯৯ রূপা, BDT/গ্রাম
+  date:          new Date().toLocaleDateString('bn-BD', { day: 'numeric', month: 'long', year: 'numeric' }),
+  source:        'goldpricez.com (Google সার্চ)'
+};
+
+function loadTodayPrices() {
+  const btn      = document.getElementById('fetch-btn');
+  const btnIcon  = document.getElementById('fetch-btn-icon');
+  const btnText  = document.getElementById('fetch-btn-text');
+  const statusEl = document.getElementById('fetch-text');
+  const iconEl   = document.getElementById('fetch-icon');
+  const sourceTag= document.getElementById('price-source-tag');
+
+  // Show loading briefly for UX feel
+  btn.disabled = true;
+  btnIcon.innerHTML = '<span class="spinner"></span>';
+  btnText.textContent = 'লোড হচ্ছে...';
+
+  setTimeout(() => {
+    setAutoFilled('gold-price',   'gold-badge',   LIVE_PRICES.gold_per_gram.toFixed(2));
+    setAutoFilled('silver-price', 'silver-badge', LIVE_PRICES.silver_per_gram.toFixed(2));
+    updateNisab();
+
+    statusEl.textContent = `✅ সর্বশেষ বাজারদর লোড হয়েছে — ${LIVE_PRICES.date}`;
+    iconEl.textContent   = '✅';
+    sourceTag.textContent = '📡 ' + LIVE_PRICES.source;
+    sourceTag.style.display = 'inline-block';
+    btnIcon.textContent  = '✅';
+    btnText.textContent  = 'আপডেট হয়েছে';
+    btn.disabled = false;
+  }, 900);
+}
+
+// Auto-load on page start
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(loadTodayPrices, 600);
+});
+
+// ════════════════════════════════════════════════
+// NISAB DISPLAY
+// ════════════════════════════════════════════════
+function updateNisab() {
+  const sp    = num('silver-price');
+  const nisab = sp * 612.36;
+  document.getElementById('nisab-value-display').textContent =
+    sp > 0 ? '৳' + Math.round(nisab).toLocaleString('bn-BD') : 'মূল্য লিখুন';
+}
+document.getElementById('silver-price').addEventListener('input', updateNisab);
+
+// ════════════════════════════════════════════════
+// LIVESTOCK ZAKAT RULES
+// ════════════════════════════════════════════════
+function goatZakat(n, goatPrice) {
+  if (n < 40) return 0;
+  let units;
+  if      (n <= 120) units = 1;
+  else if (n <= 200) units = 2;
+  else if (n <= 300) units = 3;
+  else               units = 3 + Math.floor((n - 300) / 100);
+  return units * goatPrice;
+}
+function cattleZakat(n, cattlePrice) {
+  if (n < 30) return 0;
+  let zakat = 0, rem = n;
+  while (rem >= 40) { zakat += cattlePrice * 0.60; rem -= 40; }
+  if (rem >= 30)    { zakat += cattlePrice * 0.40; }
+  return zakat;
+}
+function camelZakat(n, goatPrice, camelPrice) {
+  if (n < 5)   return 0;
+  if (n <= 9)  return goatPrice * 1;
+  if (n <= 14) return goatPrice * 2;
+  if (n <= 19) return goatPrice * 3;
+  if (n <= 24) return goatPrice * 4;
+  if (n <= 35) return camelPrice * 0.5;
+  return Math.floor(n / 5) * goatPrice;
+}
+
+// ════════════════════════════════════════════════
+// MAIN ZAKAT CALCULATION
+// ════════════════════════════════════════════════
+function calculateZakat() {
+  const silverPPG = num('silver-price');
+  const goldPPG   = num('gold-price');
+  const nisab     = silverPPG * 612.36;
+
+  if (!silverPPG || !goldPPG) {
+    alert('অনুগ্রহ করে আগে সোনা ও রূপার মূল্য লিখুন অথবা "লাইভ দাম আনুন" বাটন চাপুন।');
+    return;
+  }
+
+  const breakdown = [];
+  let totalWealth = 0, totalZakat = 0;
+
+  // 1. Cash & Savings
+  const netCash = Math.max(0, num('cash') + num('bank') + num('fdr') + num('receivable') - num('liabilities'));
+  if (netCash > 0) {
+    const z = netCash * 0.025;
+    totalWealth += netCash; totalZakat += z;
+    breakdown.push({ name: '💰 নগদ ও ব্যাংক সঞ্চয়', wealth: netCash, zakat: z, rate: '২.৫%' });
+  }
+
+  // 2. Gold
+  const goldVal = num('gold-grams') * goldPPG;
+  if (goldVal > 0) {
+    const z = goldVal * 0.025;
+    totalWealth += goldVal; totalZakat += z;
+    breakdown.push({ name: '🥇 সোনা (' + num('gold-grams') + 'গ্রাম)', wealth: goldVal, zakat: z, rate: '২.৫%' });
+  }
+
+  // 3. Silver
+  const silverVal = num('silver-grams') * silverPPG;
+  if (silverVal > 0) {
+    const z = silverVal * 0.025;
+    totalWealth += silverVal; totalZakat += z;
+    breakdown.push({ name: '🥈 রূপা (' + num('silver-grams') + 'গ্রাম)', wealth: silverVal, zakat: z, rate: '২.৫%' });
+  }
+
+  // 4. Business
+  const netBiz = Math.max(0, num('business-stock') + num('business-cash') - num('business-liabilities'));
+  if (netBiz > 0) {
+    const z = netBiz * 0.025;
+    totalWealth += netBiz; totalZakat += z;
+    breakdown.push({ name: '🏪 ব্যবসায়িক সম্পদ', wealth: netBiz, zakat: z, rate: '২.৫%' });
+  }
+
+  // 5. Investments
+  const totalInvest = num('shares') + num('mutual-fund') + num('other-investment') + num('rental-income');
+  if (totalInvest > 0) {
+    const z = totalInvest * 0.025;
+    totalWealth += totalInvest; totalZakat += z;
+    breakdown.push({ name: '📈 বিনিয়োগ ও শেয়ার', wealth: totalInvest, zakat: z, rate: '২.৫%' });
+  }
+
+  // 6. Agri – rain
+  const rainCrop = num('rain-crop');
+  if (rainCrop > 0) {
+    const z = rainCrop * 0.10;
+    totalWealth += rainCrop; totalZakat += z;
+    breakdown.push({ name: '🌾 বৃষ্টির পানির ফসল', wealth: rainCrop, zakat: z, rate: '১০%' });
+  }
+
+  // 7. Agri – irrigated
+  const irriCrop = num('irrigated-crop');
+  if (irriCrop > 0) {
+    const z = irriCrop * 0.05;
+    totalWealth += irriCrop; totalZakat += z;
+    breakdown.push({ name: '🚿 সেচের পানির ফসল', wealth: irriCrop, zakat: z, rate: '৫%' });
+  }
+
+  // 8. Livestock
+  const goatP   = num('goat-price')   || 8000;
+  const cattleP = num('cattle-price') || 50000;
+  const camelP  = goatP * 7;
+  const goatCt  = num('goat'), cattleCt = num('cattle'), camelCt = num('camel');
+  const gZ = goatZakat(goatCt, goatP), cZ = cattleZakat(cattleCt, cattleP), caZ = camelZakat(camelCt, goatP, camelP);
+  if (gZ  > 0) { totalWealth += goatCt*goatP;   totalZakat += gZ;  breakdown.push({ name:'🐐 ছাগল/ভেড়া ('+goatCt+'টি)',   wealth:goatCt*goatP,   zakat:gZ,  rate:'শরীয়া' }); }
+  if (cZ  > 0) { totalWealth += cattleCt*cattleP;totalZakat += cZ;  breakdown.push({ name:'🐄 গরু/মহিষ ('+cattleCt+'টি)',  wealth:cattleCt*cattleP,zakat:cZ,  rate:'শরীয়া' }); }
+  if (caZ > 0) { totalWealth += camelCt*camelP;  totalZakat += caZ; breakdown.push({ name:'🐪 উট ('+camelCt+'টি)',          wealth:camelCt*camelP,  zakat:caZ, rate:'শরীয়া' }); }
+
+  // ── Eligibility ──
+  const isEligible = totalWealth >= nisab && totalZakat > 0;
+
+  // ── Render Result ──
+  const panel = document.getElementById('result-panel');
+  panel.style.display = 'block';
+  panel.scrollIntoView({ behavior:'smooth', block:'start' });
+
+  document.getElementById('total-wealth-display').textContent =
+    'মোট সম্পদ: ' + fmt(totalWealth) + ' | নিসাব: ' + fmt(nisab);
+
+  document.getElementById('total-zakat-display').innerHTML = isEligible
+    ? fmt(totalZakat) + ' <span>টাকা</span>'
+    : '০ <span>টাকা</span>';
+
+  const badge = document.getElementById('eligibility-badge');
+  if (isEligible) {
+    badge.textContent = '✅ আপনার উপর যাকাত ফরজ';
+    badge.className   = 'result-eligible eligible-yes';
+  } else if (totalWealth > 0) {
+    badge.textContent = '❌ নিসাব পরিমাণ পৌঁছেনি — যাকাত ফরজ নয়';
+    badge.className   = 'result-eligible eligible-no';
+  } else {
+    badge.textContent = 'ℹ️ কোনো সম্পদ লেখা হয়নি';
+    badge.className   = 'result-eligible';
+  }
+
+  const grid = document.getElementById('breakdown-grid');
+  grid.innerHTML = '';
+  if (!breakdown.length) {
+    grid.innerHTML = '<div class="breakdown-row"><span class="br-name">কোনো সম্পদ লেখা হয়নি</span></div>';
+  } else {
+    breakdown.forEach(item => {
+      const row = document.createElement('div');
+      row.className = 'breakdown-row';
+      row.innerHTML = `<span class="br-name">${item.name}<span class="br-rate"> (${item.rate})</span></span><span class="br-amount">${fmt(item.zakat)}</span>`;
+      grid.appendChild(row);
+    });
+    const tot = document.createElement('div');
+    tot.className = 'breakdown-row total-row';
+    tot.innerHTML = `<span class="br-name" style="font-weight:700;color:var(--gold-lt);">মোট প্রদেয় যাকাত</span><span class="br-amount" style="font-size:1.1rem;">${fmt(isEligible ? totalZakat : 0)}</span>`;
+    grid.appendChild(tot);
+  }
+}
+
+// ════════════════════════════════════════════════
+// RESET
+// ════════════════════════════════════════════════
+function resetForm() {
+  document.querySelectorAll('input[type=number]').forEach(inp => {
+    if (!['goat-price','cattle-price'].includes(inp.id)) inp.value = '';
+    inp.className = '';
+  });
+  ['silver-badge','gold-badge'].forEach(id => { document.getElementById(id).style.display='none'; });
+  document.getElementById('result-panel').style.display = 'none';
+  document.getElementById('fetch-text').textContent = 'আজকের সোনা ও রূপার দাম লোড করতে বাটন চাপুন';
+  document.getElementById('fetch-icon').textContent = '🌐';
+  document.getElementById('price-source-tag').style.display = 'none';
+  updateNisab();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+<!-- FOOTER -->
+<footer style="
+  background: linear-gradient(135deg, var(--emerald) 0%, #0a3d25 100%);
+  color: rgba(255,255,255,0.75);
+  text-align: center;
+  padding: 22px 20px;
+  font-family: 'Noto Serif Bengali', serif;
+  font-size: .9rem;
+  letter-spacing: .01em;
+  margin-top: 12px;
+">
+  Made with 🩵 by
+  <a href="https://abdullahalfahim.bd" target="_blank" rel="noopener" style="
+    color: var(--gold-lt);
+    font-weight: 700;
+    text-decoration: none;
+    border-bottom: 1.5px solid rgba(228,201,126,0.45);
+    padding-bottom: 1px;
+    transition: color .2s, border-color .2s;
+  "
+  onmouseover="this.style.color='#fff';this.style.borderColor='#fff'"
+  onmouseout="this.style.color='#e4c97e';this.style.borderColor='rgba(228,201,126,0.45)'"
+  >Abdullah Al Fahim</a>
+</footer>
+</body>
+</html>
