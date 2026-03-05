@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="emerald">#0d4a2f</color>
+    <color name="emerald_mid">#145c3a</color>
+    <color name="emerald_lt">#1a7a4e</color>
+    <color name="gold">#c9a84c</color>
+    <color name="gold_lt">#e4c97e</color>
+    <color name="cream">#fdf8ee</color>
+    <color name="white">#ffffff</color>
+    <color name="statusBarColor">#0a3d25</color>
+</resources>

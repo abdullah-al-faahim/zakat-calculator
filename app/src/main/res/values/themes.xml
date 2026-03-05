@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App theme – full-screen, no title bar -->
+    <style name="Theme.ZakatCalculator" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/emerald</item>
+        <item name="colorPrimaryVariant">@color/emerald_mid</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/gold</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="android:statusBarColor">@color/statusBarColor</item>
+        <item name="android:navigationBarColor">@color/emerald</item>
+        <item name="android:windowBackground">@color/cream</item>
+    </style>
+
+    <!-- Splash theme – keeps screen dark while loading -->
+    <style name="Theme.ZakatCalculator.Splash" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/emerald</item>
+        <item name="android:navigationBarColor">@color/emerald</item>
+        <item name="android:windowBackground">@color/emerald</item>
+    </style>
+</resources>

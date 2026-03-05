@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Outer ring -->
+    <item>
+        <shape android:shape="oval">
+            <stroke android:width="2dp" android:color="#c9a84c"/>
+            <solid android:color="transparent"/>
+            <size android:width="140dp" android:height="140dp"/>
+        </shape>
+    </item>
+    <!-- Inner ring -->
+    <item android:top="16dp" android:bottom="16dp" android:left="16dp" android:right="16dp">
+        <shape android:shape="oval">
+            <stroke android:width="1dp" android:color="#e4c97e"/>
+            <solid android:color="rgba(201,168,76,0.1)"/>
+        </shape>
+    </item>
+    <!-- Center crescent-star symbol as text placeholder -->
+    <item android:top="36dp" android:bottom="36dp" android:left="36dp" android:right="36dp">
+        <shape android:shape="oval">
+            <solid android:color="rgba(201,168,76,0.2)"/>
+            <stroke android:width="1dp" android:color="#c9a84c"/>
+        </shape>
+    </item>
+</layer-list>

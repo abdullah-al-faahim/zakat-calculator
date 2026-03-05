@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="#0d4a2f"
+    android:padding="40dp">
+
+    <!-- Decorative ring -->
+    <View
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:background="@drawable/splash_circle"
+        android:layout_marginBottom="24dp"/>
+
+    <!-- Arabic Title -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="حاسبة الزكاة"
+        android:textColor="#e4c97e"
+        android:textSize="32sp"
+        android:fontFamily="serif"
+        android:gravity="center"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- Gold divider -->
+    <View
+        android:layout_width="80dp"
+        android:layout_height="2dp"
+        android:background="#c9a84c"
+        android:layout_marginBottom="12dp"/>
+
+    <!-- Bengali Title -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="যাকাত ক্যালকুলেটর"
+        android:textColor="#ffffff"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- Subtitle -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="কুরআন ও সুন্নাহর আলোকে"
+        android:textColor="#aaccbb"
+        android:textSize="13sp"
+        android:gravity="center"
+        android:layout_marginBottom="40dp"/>
+
+    <!-- Loading indicator -->
+    <ProgressBar
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:indeterminateTint="#c9a84c"
+        android:layout_marginBottom="24dp"/>
+
+    <!-- Author -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Abdullah Al Fahim"
+        android:textColor="#c9a84c"
+        android:textSize="12sp"
+        android:gravity="center"/>
+
+</LinearLayout>

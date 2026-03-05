@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Gold circle ring -->
+    <path
+        android:strokeColor="#c9a84c"
+        android:strokeWidth="2"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M54,18 A36,36 0 1,1 53.99,18"/>
+
+    <!-- Inner circle -->
+    <path
+        android:strokeColor="#e4c97e"
+        android:strokeWidth="1.5"
+        android:fillColor="#1a7a4e20"
+        android:pathData="M54,28 A26,26 0 1,1 53.99,28"/>
+
+    <!-- Arabic Z (زكاة) simplified - gold crescent shape -->
+    <path
+        android:fillColor="#c9a84c"
+        android:pathData="M46,40 Q54,36 62,40 Q58,44 54,44 Q50,44 46,40Z"/>
+    <path
+        android:fillColor="#c9a84c"
+        android:pathData="M44,44 L64,44 L62,50 L46,50 Z"/>
+    <path
+        android:fillColor="#c9a84c"
+        android:pathData="M46,50 Q54,54 62,50 Q58,60 54,62 Q50,60 46,50Z"/>
+
+    <!-- Small star dot -->
+    <circle
+        android:fillColor="#e4c97e"
+        android:cx="66"
+        android:cy="38"
+        android:r="3"/>
+
+</vector>
